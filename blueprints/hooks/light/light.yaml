@@ -367,13 +367,13 @@ action:
                 sequence:
                   - service: light.toggle
                     data:
-                      entity_id: light
+                      entity_id: !light
                       brightness: !input on_brightness
                       transition: '{{ light_transition / 1000 }}'
             default:
               - service: light.toggle
                 data:
-                  entity_id: light
+                  entity_id: !light
                   transition: '{{ light_transition / 1000 }}'
       - conditions: '{{ action == turn_on }}'
         sequence:
@@ -382,19 +382,19 @@ action:
                 sequence:
                   - service: light.turn_on
                     data:
-                      entity_id: light
+                      entity_id: !light
                       brightness: !input on_brightness
                       transition: '{{ light_transition / 1000 }}'
             default:
               - service: light.turn_on
                 data:
-                  entity_id: light
+                  entity_id: !light
                   transition: '{{ light_transition / 1000 }}'
       - conditions: '{{ action == turn_off }}'
         sequence:
           - service: light.turn_off
             data:
-              entity_id: light
+              entity_id: !light
               transition: '{{ light_transition / 1000 }}'
       - conditions: '{{ action == brightness_up }}'
         sequence:
@@ -405,7 +405,7 @@ action:
                   - service: light.turn_on
                     data:
                       transition: '{{ light_transition / 1000 }}'
-                      entity_id: light
+                      entity_id: !light
               # if light is off and smooth power on is enabled, turn it on at minimum brightness
               - conditions: '{{ states(light) == "off" and smooth_power_on}}'
                 sequence:
@@ -413,14 +413,14 @@ action:
                     data:
                       brightness: '{{ min_brightness }}'
                       transition: '{{ light_transition / 1000 }}'
-                      entity_id: light
+                      entity_id: !light
             # else the light is on, hence increase its brightness
             default:
               - service: light.turn_on
                 data:
                   brightness: '{{ [ [state_attr(light,"brightness")+step_short, min_brightness] | max, max_brightness] | min }}'
                   transition: 0.25
-                  entity_id: light
+                  entity_id: !light
       - conditions: '{{ action == brightness_down and states(light) == "on" }}'
         sequence:
           - choose:
@@ -429,13 +429,13 @@ action:
                   - service: light.turn_off
                     data:
                       transition: '{{ light_transition / 1000 }}'
-                      entity_id: light
+                      entity_id: !light
             default:
               - service: light.turn_on
                 data:
                   brightness: '{{ [ [state_attr(light,"brightness")-step_short, min_brightness] | max, max_brightness] | min }}'
                   transition: 0.25
-                  entity_id: light
+                  entity_id: !light
       - conditions: '{{ action == brightness_up_repeat }}'
         sequence:
           # first step for the smooth power on feature: subsequent steps can skip this check since light will be already on
@@ -446,7 +446,7 @@ action:
                   - service: light.turn_on
                     data:
                       transition: '{{ light_transition / 1000 }}'
-                      entity_id: light
+                      entity_id: !light
                   - delay:
                       milliseconds: !input light_transition
               # if light is off and smooth power on is enabled, turn it on at minimum brightness
@@ -456,7 +456,7 @@ action:
                     data:
                       brightness: '{{ min_brightness }}'
                       transition: '{{ light_transition / 1000 }}'
-                      entity_id: light
+                      entity_id: !light
                   - delay:
                       milliseconds: !input light_transition
           # else move on to the loop for increasing the light brightness
@@ -467,7 +467,7 @@ action:
                   data:
                     brightness: '{{ [ [state_attr(light,"brightness")+step_long, min_brightness] | max, max_brightness] | min }}'
                     transition: 0.25
-                    entity_id: light
+                    entity_id: !light
                 - delay:
                     milliseconds: 250
       - conditions: '{{ action == brightness_down_repeat and states(light) == "on"  }}'
@@ -487,7 +487,7 @@ action:
                                 - service: light.turn_off
                                   data:
                                     transition: '{{ light_transition / 1000 }}'
-                                    entity_id: light
+                                    entity_id: !light
                                 - delay:
                                     milliseconds: !input light_transition
                           # else lower the light's brightness
@@ -496,7 +496,7 @@ action:
                               data:
                                 brightness: '{{ [ [state_attr(light,"brightness")-step_long, min_brightness] | max, max_brightness] | min }}'
                                 transition: 0.25
-                                entity_id: light
+                                entity_id: !light
                             - delay:
                                 milliseconds: 250
             default:
@@ -509,7 +509,7 @@ action:
                       data:
                         brightness: '{{ [ [state_attr(light,"brightness")-step_long, min_brightness] | max, max_brightness] | min }}'
                         transition: 0.25
-                        entity_id: light
+                        entity_id: !light
                     - delay:
                         milliseconds: 250
       - conditions: '{{ action == color_up and light_color_mode_id != "none" }}'
@@ -521,14 +521,14 @@ action:
                   data:
                     color_temp: '{{ state_attr(light,"color_temp")|int + 50 }}'
                     transition: 0.25
-                    entity_id: light
+                    entity_id: !light
             - conditions: '{{ light_color_mode_id == "hs_color" }}'
               sequence:
                 - service: light.turn_on
                   data:
                     hs_color: '{{ [((state_attr(light,"hs_color")[0] or 0) + 15) % 360, 100] }}'
                     transition: 0.25
-                    entity_id: light
+                    entity_id: !light
       - conditions: '{{ action == color_down and light_color_mode_id != "none" }}'
         sequence:
           choose:
@@ -538,14 +538,14 @@ action:
                   data:
                     color_temp: '{{ [state_attr(light,"color_temp")|int - 50, 1]|max }}'
                     transition: 0.25
-                    entity_id: light
+                    entity_id: !light
             - conditions: '{{ light_color_mode_id == "hs_color" }}'
               sequence:
                 - service: light.turn_on
                   data:
                     hs_color: '{{ [((state_attr(light,"hs_color")[0] or 0) - 15) % 360, 100] }}'
                     transition: 0.25
-                    entity_id: light
+                    entity_id: !light
       - conditions: '{{ action == color_up_repeat and light_color_mode_id != "none" }}'
         sequence:
           choose:
@@ -558,7 +558,7 @@ action:
                         data:
                           color_temp: '{{ state_attr(light,"color_temp")|int + 50 }}'
                           transition: 0.25
-                          entity_id: light
+                          entity_id: !light
                       - delay:
                           milliseconds: 250
             - conditions: '{{ light_color_mode_id == "hs_color" }}'
@@ -570,7 +570,7 @@ action:
                         data:
                           hs_color: '{{ [((state_attr(light,"hs_color")[0] or 0) + 15) % 360, 100] }}'
                           transition: 0.25
-                          entity_id: light
+                          entity_id: !light
                       - delay:
                           milliseconds: 250
       - conditions: '{{ action == color_down_repeat and light_color_mode_id != "none" }}'
@@ -585,7 +585,7 @@ action:
                         data:
                           color_temp: '{{ [state_attr(light,"color_temp")|int - 50, 1]|max }}'
                           transition: 0.25
-                          entity_id: light
+                          entity_id: !light
                       - delay:
                           milliseconds: 250
             - conditions: '{{ light_color_mode_id == "hs_color" }}'
@@ -597,6 +597,6 @@ action:
                         data:
                           hs_color: '{{ [((state_attr(light,"hs_color")[0] or 0) - 15) % 360, 100] }}'
                           transition: 0.25
-                          entity_id: light
+                          entity_id: !light
                       - delay:
                           milliseconds: 250
