@@ -521,14 +521,14 @@ action:
                   data:
                     color_temp: '{{ state_attr(light,"color_temp")|int + 50 }}'
                     transition: 0.25
-                  entity_id: light
+                    entity_id: light
             - conditions: '{{ light_color_mode_id == "hs_color" }}'
               sequence:
                 - service: light.turn_on
                   data:
                     hs_color: '{{ [((state_attr(light,"hs_color")[0] or 0) + 15) % 360, 100] }}'
                     transition: 0.25
-                  entity_id: light
+                    entity_id: light
       - conditions: '{{ action == color_down and light_color_mode_id != "none" }}'
         sequence:
           choose:
@@ -538,14 +538,14 @@ action:
                   data:
                     color_temp: '{{ [state_attr(light,"color_temp")|int - 50, 1]|max }}'
                     transition: 0.25
-                  entity_id: light
+                    entity_id: light
             - conditions: '{{ light_color_mode_id == "hs_color" }}'
               sequence:
                 - service: light.turn_on
                   data:
                     hs_color: '{{ [((state_attr(light,"hs_color")[0] or 0) - 15) % 360, 100] }}'
                     transition: 0.25
-                  entity_id: light
+                    entity_id: light
       - conditions: '{{ action == color_up_repeat and light_color_mode_id != "none" }}'
         sequence:
           choose:
@@ -558,7 +558,7 @@ action:
                         data:
                           color_temp: '{{ state_attr(light,"color_temp")|int + 50 }}'
                           transition: 0.25
-                        entity_id: light
+                          entity_id: light
                       - delay:
                           milliseconds: 250
             - conditions: '{{ light_color_mode_id == "hs_color" }}'
@@ -570,7 +570,7 @@ action:
                         data:
                           hs_color: '{{ [((state_attr(light,"hs_color")[0] or 0) + 15) % 360, 100] }}'
                           transition: 0.25
-                        entity_id: light
+                          entity_id: light
                       - delay:
                           milliseconds: 250
       - conditions: '{{ action == color_down_repeat and light_color_mode_id != "none" }}'
@@ -585,7 +585,7 @@ action:
                         data:
                           color_temp: '{{ [state_attr(light,"color_temp")|int - 50, 1]|max }}'
                           transition: 0.25
-                        entity_id: light
+                          entity_id: light
                       - delay:
                           milliseconds: 250
             - conditions: '{{ light_color_mode_id == "hs_color" }}'
@@ -597,6 +597,6 @@ action:
                         data:
                           hs_color: '{{ [((state_attr(light,"hs_color")[0] or 0) - 15) % 360, 100] }}'
                           transition: 0.25
-                        entity_id: light
+                          entity_id: light
                       - delay:
                           milliseconds: 250
