@@ -318,7 +318,7 @@ variables:
       button_up_long: [move_with_on_off_MoveMode.Up_83]
       button_up_release: [stop_with_on_off]
       button_down_short: ['off']
-      button_down_long: [move_83_0_0]
+      button_down_long: [move_1_83_0_0]
       button_down_release: [stop_with_on_off]
     zigbee2mqtt:
       button_left_short: [arrow_left_click]
