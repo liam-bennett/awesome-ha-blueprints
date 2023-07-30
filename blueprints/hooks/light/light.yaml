@@ -65,8 +65,7 @@ blueprint:
       name: (Required) Light
       description: Light which will be controlled with this automation.
       selector:
-        entity:
-          domain: light
+        template:
     light_color_mode:
       name: (Optional) Light color mode
       description: Specify how the controller will set the light color. Choose "Color Temperature" and "Hue - Saturation" depending on the features supported by your light. If you are not sure you can select "Auto". "None" will disable color control features.
